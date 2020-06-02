@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff"
+    android:orientation="vertical"
+    android:layout_marginTop="20dp">
+
+    <RelativeLayout
+        android:id="@+id/progress_bar_conteiner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
+
+        <com.github.lzyzsd.circleprogress.ArcProgress
+            app:arc_text_color="#555"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            app:arc_suffix_text="°С"
+            app:arc_max="30"
+            app:arc_suffix_text_size="35sp"
+            app:arc_text_size="75sp"
+            android:id="@+id/temperature_progress_bar"
+            app:arc_bottom_text_size="20sp"
+            app:arc_finished_color="#007DD6"
+            app:arc_unfinished_color="#CCC"
+            />
+    </RelativeLayout>
+
+</LinearLayout>

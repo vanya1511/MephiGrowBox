@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:icon="@drawable/light"
+        android:id="@+id/light"
+        android:title="Свет" />
+
+    <item
+        android:icon="@drawable/temp"
+        android:id="@+id/temp"
+        android:title="Температура" />
+
+    <item
+        android:icon="@drawable/water"
+        android:id="@+id/water"
+        android:title="Полив" />
+
+    <item
+        android:icon="@drawable/info"
+        android:id="@+id/info"
+        android:title="Инфо" />
+
+</menu>
