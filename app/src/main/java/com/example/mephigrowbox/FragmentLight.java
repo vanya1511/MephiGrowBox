@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,10 +23,11 @@ import com.google.firebase.database.ValueEventListener;
 public class FragmentLight extends Fragment {
 
     private FirebaseDatabase database;
-    private DatabaseReference led,RedColor,GreenColor,BlueColor;
+    private DatabaseReference led, redColor, greenColor, blueColor, light;
     private ImageView lampImg;
     private boolean isTurned = false;
-    private SeekBar rBar,gBar,bBar;
+    private SeekBar rBar, gBar, bBar;
+    private TextView lightTxt;
 
     @Nullable
     @Override
@@ -46,11 +48,10 @@ public class FragmentLight extends Fragment {
         led.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if ((long)dataSnapshot.getValue()== 1 ) {
+                if ((long) dataSnapshot.getValue() == 1) {
                     lampImg.setImageResource(R.drawable.light_on);
                     isTurned = true;
-                }
-                else {
+                } else {
                     lampImg.setImageResource(R.drawable.light_off);
                     isTurned = false;
                 }
@@ -69,13 +70,12 @@ public class FragmentLight extends Fragment {
                     lampImg.setImageResource(R.drawable.light_off);
                     isTurned = false;
                     led.setValue(0);
-                }
-                else {
+                } else {
                     lampImg.setImageResource(R.drawable.light_on);
                     isTurned = true;
                     led.setValue(1);
                 }
-                Log.d("------------","---------------------------------`" + isTurned);
+                Log.d("------------", "---------------------------------`" + isTurned);
 
             }
         });
@@ -91,15 +91,15 @@ public class FragmentLight extends Fragment {
         gBar.setOnSeekBarChangeListener(seekBarChangeListener);
         bBar.setOnSeekBarChangeListener(seekBarChangeListener);
 
-        RedColor = database.getReference("RedColor");
-        GreenColor = database.getReference("GreenColor");
-        BlueColor = database.getReference("BlueColor");
+        redColor = database.getReference("RedColor");
+        greenColor = database.getReference("GreenColor");
+        blueColor = database.getReference("BlueColor");
 
-        RedColor.addValueEventListener(new ValueEventListener() {
+        redColor.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 long value = (long) dataSnapshot.getValue();
-                rBar.setProgress((int)value);
+                rBar.setProgress((int) value);
             }
 
             @Override
@@ -108,11 +108,11 @@ public class FragmentLight extends Fragment {
             }
         });
 
-        GreenColor.addValueEventListener(new ValueEventListener() {
+        greenColor.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 long value = (long) dataSnapshot.getValue();
-                gBar.setProgress((int)value);
+                gBar.setProgress((int) value);
             }
 
             @Override
@@ -121,36 +121,58 @@ public class FragmentLight extends Fragment {
             }
         });
 
-        BlueColor.addValueEventListener(new ValueEventListener() {
+        blueColor.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 long value = (long) dataSnapshot.getValue();
-                bBar.setProgress((int)value);
+                bBar.setProgress((int) value);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.d("Error", databaseError.getMessage());
+            }
+        });
+
+        //Photoresistor:
+
+        light = database.getReference("Photoresistor");
+        lightTxt = getActivity().findViewById(R.id.light_level);
+
+        light.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                long value = (long) dataSnapshot.getValue();
+                String s = "Уровень освещения\n" + value + " ед.";
+                lightTxt.setText(s);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
         });
     }
+
     private SeekBar.OnSeekBarChangeListener seekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-             new Handler().postDelayed(new Runnable() {
+            new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    RedColor.setValue(rBar.getProgress());
-                    GreenColor.setValue(gBar.getProgress());
-                    BlueColor.setValue(bBar.getProgress());
+                    redColor.setValue(rBar.getProgress());
+                    greenColor.setValue(gBar.getProgress());
+                    blueColor.setValue(bBar.getProgress());
                 }
-            },100);
+            }, 100);
         }
 
         @Override
-        public void onStartTrackingTouch(SeekBar seekBar) { }
+        public void onStartTrackingTouch(SeekBar seekBar) {
+        }
 
         @Override
-        public void onStopTrackingTouch(SeekBar seekBar) { }
+        public void onStopTrackingTouch(SeekBar seekBar) {
+        }
     };
 }

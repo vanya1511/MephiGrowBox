@@ -18,9 +18,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class FragmentWater extends Fragment {
 
-    private FirebaseDatabase database;
-    private DatabaseReference humidityAir;
-    private TextView humidityTxt;
+    private TextView humidityAirTxt, humiditySoilTxt;
 
     @Nullable
     @Override
@@ -32,22 +30,34 @@ public class FragmentWater extends Fragment {
     public void onStart() {
         super.onStart();
 
-        database = FirebaseDatabase.getInstance();
-        humidityTxt = getActivity().findViewById(R.id.humidity_txt);
-        humidityAir = database.getReference("HumidityAir");
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        humidityAirTxt = getActivity().findViewById(R.id.humidity_air_txt);
+        humiditySoilTxt = getActivity().findViewById(R.id.humidity_soil_txt);
+        DatabaseReference humidityAir = database.getReference("HumidityAir");
+        DatabaseReference humiditySoil = database.getReference("HumiditySoil");
 
         humidityAir.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 long value = (long) dataSnapshot.getValue();
                 String s = "Влажность воздуха\n" + value + "%";
-                humidityTxt.setText(s);
+                humidityAirTxt.setText(s);
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError databaseError) { }
+        });
 
+        humiditySoil.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                long value = (long) dataSnapshot.getValue();
+                String s = "Влажность почвы\n" + value + " eд.";
+                humiditySoilTxt.setText(s);
             }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) { }
         });
     }
 }

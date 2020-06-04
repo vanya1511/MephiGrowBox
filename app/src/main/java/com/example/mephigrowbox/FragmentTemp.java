@@ -1,6 +1,7 @@
 package com.example.mephigrowbox;
 
 import android.animation.ValueAnimator;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -48,13 +49,22 @@ public class FragmentTemp extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 long value = (long) dataSnapshot.getValue();
-                if (value<10) tempBar.setBottomText("Холодно!");
+                if (value<10) {
+                    tempBar.setBottomText("Холодно!");
+                    int color = Color.parseColor("#ff007DD6");
+                    tempBar.setFinishedStrokeColor(color);
+                }
                 else {
                     if (value <= 20 && value >= 10) {
+                        int color = Color.parseColor("#ff00ff00");
                         tempBar.setBottomText("Идеально!");
+                        tempBar.setFinishedStrokeColor(color);
+
                     }
                     else {
                         tempBar.setBottomText("Жарко!");
+                        int color = Color.parseColor("#ffff0000");
+                        tempBar.setFinishedStrokeColor(color);
                     }
                 }
 
