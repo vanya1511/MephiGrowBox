@@ -1,5 +1,6 @@
 package com.example.mephigrowbox;
 
+import android.animation.ValueAnimator;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.github.lzyzsd.circleprogress.CircleProgress;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -17,8 +19,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class FragmentWater extends Fragment {
-
-    private TextView humidityAirTxt, humiditySoilTxt;
 
     @Nullable
     @Override
@@ -31,8 +31,8 @@ public class FragmentWater extends Fragment {
         super.onStart();
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        humidityAirTxt = getActivity().findViewById(R.id.humidity_air_txt);
-        humiditySoilTxt = getActivity().findViewById(R.id.humidity_soil_txt);
+        final CircleProgress air_circle = getActivity().findViewById(R.id.air_circle);
+        final CircleProgress soil_circle = getActivity().findViewById(R.id.soil_circle);
         DatabaseReference humidityAir = database.getReference("HumidityAir");
         DatabaseReference humiditySoil = database.getReference("HumiditySoil");
 
@@ -40,8 +40,14 @@ public class FragmentWater extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 long value = (long) dataSnapshot.getValue();
-                String s = "Влажность воздуха\n" + value + "%";
-                humidityAirTxt.setText(s);
+                ValueAnimator animator = ValueAnimator.ofInt(air_circle.getProgress(), (int) value);
+                animator.setDuration(1000);
+                animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    public void onAnimationUpdate(ValueAnimator animation) {
+                        air_circle.setProgress((int) animation.getAnimatedValue());
+                    }
+                });
+                animator.start();
             }
 
             @Override
@@ -52,8 +58,15 @@ public class FragmentWater extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 long value = (long) dataSnapshot.getValue();
-                String s = "Влажность почвы\n" + value + " eд.";
-                humiditySoilTxt.setText(s);
+                soil_circle.setSuffixText("ед.");
+                ValueAnimator animator = ValueAnimator.ofInt(soil_circle.getProgress(), (int) value);
+                animator.setDuration(1000);
+                animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    public void onAnimationUpdate(ValueAnimator animation) {
+                        soil_circle.setProgress((int) animation.getAnimatedValue());
+                    }
+                });
+                animator.start();
             }
 
             @Override

@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
 
     <ScrollView
         android:layout_width="match_parent"
@@ -13,36 +15,69 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/lamp"
-                android:layout_width="250dp"
-                android:layout_height="250dp"
-                android:layout_gravity="center"
+            <TextView
+                android:textColor="#000"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="50sp"
+                android:text="Влажность"
+                android:gravity="center"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="50dp"
-                android:background="@drawable/humidity" />
-
-            <TextView
-                android:layout_marginTop="20dp"
-                android:id="@+id/humidity_air_txt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="30sp"
-                android:textColor="#000"
-                android:layout_gravity="center_horizontal"
                 android:gravity="center"
-                />
+                android:orientation="horizontal">
 
-            <TextView
-                android:layout_marginTop="20dp"
-                android:id="@+id/humidity_soil_txt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="30sp"
-                android:textColor="#000"
-                android:layout_gravity="center_horizontal"
-                android:gravity="center"
-                />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
+                    <com.github.lzyzsd.circleprogress.CircleProgress
+                        android:id="@+id/air_circle"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:layout_gravity="center"
+                        app:circle_finished_color="#4FB6D6"
+                        app:circle_max="100" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:text="Влажность\n воздуха"
+                        android:textSize="20sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <com.github.lzyzsd.circleprogress.CircleProgress
+                        android:id="@+id/soil_circle"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:layout_gravity="center"
+                        app:circle_finished_color="#4FB6D6"
+                        app:circle_max="950" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center"
+                        android:text="Влажность\n почвы"
+                        android:textSize="20sp" />
+
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

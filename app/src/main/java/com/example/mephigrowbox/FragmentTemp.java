@@ -18,18 +18,28 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.github.lzyzsd.circleprogress.ArcProgress;
-import com.google.android.material.circularreveal.CircularRevealRelativeLayout;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import lecho.lib.hellocharts.model.Line;
+import lecho.lib.hellocharts.model.LineChartData;
+import lecho.lib.hellocharts.model.PointValue;
+import lecho.lib.hellocharts.view.LineChartView;
+
 
 public class FragmentTemp extends Fragment {
 
     private FirebaseDatabase database;
     private DatabaseReference temperature;
+    private long value;
 
     @Nullable
     @Override
@@ -48,7 +58,7 @@ public class FragmentTemp extends Fragment {
         temperature.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                long value = (long) dataSnapshot.getValue();
+                value = (long) dataSnapshot.getValue();
                 if (value<10) {
                     tempBar.setBottomText("Холодно!");
                     int color = Color.parseColor("#ff007DD6");
