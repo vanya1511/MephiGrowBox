@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,28 +30,8 @@ public class FragmentWater extends Fragment {
         super.onStart();
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        final CircleProgress air_circle = getActivity().findViewById(R.id.air_circle);
         final CircleProgress soil_circle = getActivity().findViewById(R.id.soil_circle);
-        DatabaseReference humidityAir = database.getReference("HumidityAir");
         DatabaseReference humiditySoil = database.getReference("HumiditySoil");
-
-        humidityAir.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                long value = (long) dataSnapshot.getValue();
-                ValueAnimator animator = ValueAnimator.ofInt(air_circle.getProgress(), (int) value);
-                animator.setDuration(1000);
-                animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    public void onAnimationUpdate(ValueAnimator animation) {
-                        air_circle.setProgress((int) animation.getAnimatedValue());
-                    }
-                });
-                animator.start();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) { }
-        });
 
         humiditySoil.addValueEventListener(new ValueEventListener() {
             @Override

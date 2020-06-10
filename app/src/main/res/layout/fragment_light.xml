@@ -1,131 +1,189 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:background="#F7FAB6">
 
-    <ScrollView
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        >
+        android:padding="20dp">
 
-        <LinearLayout
+        <View
+            android:id="@+id/rectangle"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/light_rectangle" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/rectangle"
+            android:layout_alignTop="@+id/rectangle"
+            android:layout_alignEnd="@+id/rectangle"
+            android:layout_alignBottom="@+id/rectangle"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="Свет"
+            android:textColor="#fff"
+            android:textSize="26sp" />
+
+
+        <View
+            android:id="@+id/ellipse"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_below="@+id/rectangle"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="40dp"
+            android:background="@drawable/white_ellipse" />
+
+
+        <TextView
+            android:id="@+id/light_result"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/ellipse"
+            android:layout_alignBottom="@+id/ellipse"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="20dp"
+            android:layout_toEndOf="@+id/ellipse"
+            android:gravity="center"
+            android:text="Освещенность"
+            android:textColor="#493F41"
+            android:textSize="18sp" />
+
+        <ImageView
+            android:id="@+id/lamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/ellipse"
+            android:layout_alignTop="@+id/ellipse"
+            android:layout_alignEnd="@+id/ellipse"
+            android:layout_alignBottom="@+id/ellipse"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:layout_margin="20dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/light_off" />
+
+        <TextView
+            android:id="@+id/power_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ellipse"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="100dp"
+            android:text="Мощность"
+            android:textColor="#515248"
+            android:textSize="15sp" />
+
+        <SeekBar
+            android:id="@+id/seek_bar_power"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_alignTop="@+id/power_txt"
+            android:layout_alignBottom="@+id/power_txt"
+            android:layout_alignParentEnd="true"
+            android:layout_toEndOf="@+id/power_txt"
+            android:max="255"
+            android:theme="@style/SeekBarColorPower" />
 
-            <TextView
-                android:textColor="#000"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="50sp"
-                android:text="Свет"
-                android:gravity="center"/>
 
-            <ImageView
-                android:id="@+id/lamp"
-                android:layout_width="250dp"
-                android:layout_height="250dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="50dp"
-                android:background="@drawable/light_off" />
+        <TextView
+            android:id="@+id/red_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/power_txt"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="30dp"
+            android:text="Красный"
+            android:textColor="#515248"
+            android:textSize="15sp" />
 
-            <TextView
-                android:layout_marginTop="20dp"
-                android:id="@+id/light_level"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textSize="20sp"
-                android:gravity="center"
-                android:textColor="#000"
-                />
+        <SeekBar
+            android:id="@+id/seek_bar_red"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/red_txt"
+            android:layout_alignBottom="@+id/red_txt"
+            android:layout_alignParentEnd="true"
+            android:layout_toEndOf="@+id/power_txt"
+            android:max="255"
+            android:theme="@style/SeekBarColorRed" />
 
-            <TextView
-                android:layout_marginTop="70dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Подбери цвет!"
-                android:textSize="30sp"
-                android:textColor="#000"
-                android:layout_gravity="center"/>
+        <TextView
+            android:id="@+id/green_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/red_txt"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="30dp"
+            android:text="Зеленый"
+            android:textColor="#515248"
+            android:textSize="15sp" />
 
-            <LinearLayout
-                android:layout_marginTop="30dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+        <SeekBar
+            android:id="@+id/seek_bar_green"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/green_txt"
+            android:layout_alignBottom="@+id/green_txt"
+            android:layout_alignParentEnd="true"
+            android:layout_toEndOf="@+id/power_txt"
+            android:max="255"
+            android:theme="@style/SeekBarColorGreen" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Красный:"
-                    android:textColor="#933"
-                    android:textSize="15sp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginStart="20dp"/>
+        <TextView
+            android:id="@+id/blue_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/green_txt"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="30dp"
+            android:text="Синий"
+            android:textColor="#515248"
+            android:textSize="15sp" />
 
-                <SeekBar
-                    android:theme="@style/SeekBarColorRed"
-                    android:id="@+id/seekBar_Red"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginEnd="30dp"
-                    android:max="255" />
-            </LinearLayout>
+        <SeekBar
+            android:id="@+id/seek_bar_blue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/blue_txt"
+            android:layout_alignBottom="@+id/blue_txt"
+            android:layout_alignParentEnd="true"
+            android:layout_toEndOf="@+id/power_txt"
+            android:max="255"
+            android:theme="@style/SeekBarColorBlue" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+        <Button
+            android:foreground="?android:attr/selectableItemBackground"
+            android:id="@+id/apply_button"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/seek_bar_blue"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/ok_rectangle"
+            android:text="ОК"
+            android:textColor="#fff"
+            android:textSize="20sp"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Зеленый:"
-                    android:textColor="#393"
-                    android:textSize="15sp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginStart="20dp"/>
+        <Button
+            android:foreground="?android:attr/selectableItemBackground"
+            android:id="@+id/return_button"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/seek_bar_blue"
+            android:layout_marginTop="50dp"
+            android:layout_marginEnd="30dp"
+            android:layout_toStartOf="@+id/apply_button"
+            android:background="@drawable/ok_rectangle"
+            android:text="Вернуть"
+            android:textColor="#fff"
+            android:textSize="20sp" />
 
-                <SeekBar
-                    android:theme="@style/SeekBarColorGreen"
-                    android:id="@+id/seekBar_Green"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginEnd="30dp"
-                    android:max="255" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Синий:     "
-                    android:textColor="#339"
-                    android:textSize="15sp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginStart="20dp"/>
-
-                <SeekBar
-                    android:theme="@style/SeekBarColorBlue"
-                    android:id="@+id/seekBar_Blue"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginEnd="30dp"
-                    android:max="255" />
-            </LinearLayout>
-        </LinearLayout>
-    </ScrollView>
-
-</RelativeLayout>
+    </RelativeLayout>
+</ScrollView>

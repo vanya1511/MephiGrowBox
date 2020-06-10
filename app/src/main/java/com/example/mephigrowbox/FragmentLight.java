@@ -1,11 +1,14 @@
 package com.example.mephigrowbox;
 
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -23,11 +26,17 @@ import com.google.firebase.database.ValueEventListener;
 public class FragmentLight extends Fragment {
 
     private FirebaseDatabase database;
-    private DatabaseReference led, redColor, greenColor, blueColor, light;
+    private DatabaseReference led;
+    private DatabaseReference redColor;
+    private DatabaseReference greenColor;
+    private DatabaseReference blueColor;
+    private DatabaseReference power;
     private ImageView lampImg;
     private boolean isTurned = false;
-    private SeekBar rBar, gBar, bBar;
+    private SeekBar rBar, gBar, bBar, pBar;
     private TextView lightTxt;
+    private Button applyBtn, returnBtn;
+    private long redValue, greenValue, blueValue,powerValue;
 
     @Nullable
     @Override
@@ -38,6 +47,17 @@ public class FragmentLight extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+
+        applyBtn = getActivity().findViewById(R.id.apply_button);
+        returnBtn = getActivity().findViewById(R.id.return_button);
+
+        GradientDrawable drawable = new GradientDrawable();
+        drawable.setColor(Color.parseColor("#2EB43B"));
+        drawable.setCornerRadius(56);
+
+        applyBtn.setBackground(drawable);
+        returnBtn.setBackground(drawable);
+
         lampImg = getActivity().findViewById(R.id.lamp);
         database = FirebaseDatabase.getInstance();
 
@@ -82,24 +102,53 @@ public class FragmentLight extends Fragment {
 
         //Choose color
 
-        rBar = getActivity().findViewById(R.id.seekBar_Red);
-        gBar = getActivity().findViewById(R.id.seekBar_Green);
-        bBar = getActivity().findViewById(R.id.seekBar_Blue);
+        rBar = getActivity().findViewById(R.id.seek_bar_red);
+        gBar = getActivity().findViewById(R.id.seek_bar_green);
+        bBar = getActivity().findViewById(R.id.seek_bar_blue);
+        pBar = getActivity().findViewById(R.id.seek_bar_power);
 
 
         rBar.setOnSeekBarChangeListener(seekBarChangeListener);
         gBar.setOnSeekBarChangeListener(seekBarChangeListener);
         bBar.setOnSeekBarChangeListener(seekBarChangeListener);
+        pBar.setOnSeekBarChangeListener(seekBarChangeListener);
 
         redColor = database.getReference("RedColor");
         greenColor = database.getReference("GreenColor");
         blueColor = database.getReference("BlueColor");
+        power = database.getReference("PowerOfLight");
+
+        applyBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        power.setValue(pBar.getProgress());
+                        redColor.setValue(rBar.getProgress());
+                        greenColor.setValue(gBar.getProgress());
+                        blueColor.setValue(bBar.getProgress());
+                    }
+                }, 100);
+            }
+        });
+
+        returnBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pBar.setProgress((int) powerValue);
+                rBar.setProgress((int) redValue);
+                gBar.setProgress((int) greenValue);
+                bBar.setProgress((int) blueValue);
+            }
+        });
+
 
         redColor.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                long value = (long) dataSnapshot.getValue();
-                rBar.setProgress((int) value);
+                redValue = (long) dataSnapshot.getValue();
+                rBar.setProgress((int) redValue);
             }
 
             @Override
@@ -111,8 +160,8 @@ public class FragmentLight extends Fragment {
         greenColor.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                long value = (long) dataSnapshot.getValue();
-                gBar.setProgress((int) value);
+                greenValue = (long) dataSnapshot.getValue();
+                gBar.setProgress((int) greenValue);
             }
 
             @Override
@@ -124,8 +173,21 @@ public class FragmentLight extends Fragment {
         blueColor.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                long value = (long) dataSnapshot.getValue();
-                bBar.setProgress((int) value);
+                blueValue = (long) dataSnapshot.getValue();
+                bBar.setProgress((int) blueValue);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d("Error", databaseError.getMessage());
+            }
+        });
+
+        power.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                powerValue = (long) dataSnapshot.getValue();
+                pBar.setProgress((int) powerValue);
             }
 
             @Override
@@ -136,8 +198,8 @@ public class FragmentLight extends Fragment {
 
         //Photoresistor:
 
-        light = database.getReference("Photoresistor");
-        lightTxt = getActivity().findViewById(R.id.light_level);
+        DatabaseReference light = database.getReference("Photoresistor");
+        lightTxt = getActivity().findViewById(R.id.light_result);
 
         light.addValueEventListener(new ValueEventListener() {
             @Override
@@ -156,15 +218,14 @@ public class FragmentLight extends Fragment {
 
     private SeekBar.OnSeekBarChangeListener seekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
         @Override
-        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    redColor.setValue(rBar.getProgress());
-                    greenColor.setValue(gBar.getProgress());
-                    blueColor.setValue(bBar.getProgress());
-                }
-            }, 100);
+        public void onProgressChanged(SeekBar seekBar, final int progress, boolean fromUser) {
+            int myColor = Color.argb(pBar.getProgress(), rBar.getProgress(), gBar.getProgress(), bBar.getProgress());
+            GradientDrawable drawable = new GradientDrawable();
+            drawable.setColor(myColor);
+            drawable.setCornerRadius(56);
+            applyBtn.setBackground(drawable);
+
+            Log.d("---------------","------------------------" + myColor);
         }
 
         @Override
