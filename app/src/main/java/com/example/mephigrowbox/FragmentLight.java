@@ -55,7 +55,6 @@ public class FragmentLight extends Fragment {
         drawable.setColor(Color.parseColor("#2EB43B"));
         drawable.setCornerRadius(56);
 
-        applyBtn.setBackground(drawable);
         returnBtn.setBackground(drawable);
 
         lampImg = getActivity().findViewById(R.id.lamp);

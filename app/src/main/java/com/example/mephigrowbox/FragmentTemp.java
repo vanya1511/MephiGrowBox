@@ -3,6 +3,7 @@ package com.example.mephigrowbox;
 import android.animation.ValueAnimator;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,9 +19,18 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
 
 
 public class FragmentTemp extends Fragment {
+
+    private Handler handler;
+
+    private GraphView gvGraph;
+    private LineGraphSeries series;
+    private int counter=0;
 
     private FirebaseDatabase database;
     private DatabaseReference temperature;
@@ -29,16 +39,23 @@ public class FragmentTemp extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_temp, container, false);
-    }
+        View view = inflater.inflate(R.layout.fragment_temp, container, false);
 
-    @Override
-    public void onStart() {
-        super.onStart();
+        gvGraph = view.findViewById(R.id.graph);
+        series = new LineGraphSeries();
+
+        gvGraph.addSeries(series);
+        gvGraph.getViewport().setMinY(0);
+        gvGraph.getViewport().setMaxY(40);
+        gvGraph.getViewport().setMaxX(30);
+        gvGraph.getViewport().setYAxisBoundsManual(true);
+        gvGraph.getViewport().setXAxisBoundsManual(true);
+        startTimer();
+
         database = FirebaseDatabase.getInstance();
 
         temperature = database.getReference("Temperature");
-        final ArcProgress tempBar = getActivity().findViewById(R.id.temperature_progress_bar);
+        final ArcProgress tempBar = view.findViewById(R.id.temperature_progress_bar);
 
         temperature.addValueEventListener(new ValueEventListener() {
             @Override
@@ -77,5 +94,27 @@ public class FragmentTemp extends Fragment {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) { }
         });
+        return view;
+    }
+    private void startTimer(){
+        handler = new Handler();
+        handler.postDelayed(new Runnable(){
+            @Override
+            public void run(){
+                temperature.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        value = (long) dataSnapshot.getValue();
+                        if (counter>=30) series.appendData(new DataPoint(counter, value), true, 1000);
+                        series.appendData(new DataPoint(counter, value), false, 1000);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) { }
+                });
+                counter++;
+                handler.postDelayed(this,1000);
+            }
+        },1000);
     }
 }

@@ -8,29 +8,29 @@
     android:orientation="vertical">
 
     <RelativeLayout
+        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="20dp">
 
-    <View
-        android:id="@+id/rectangle"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/temperature_rectangle" />
+        <View
+            android:id="@+id/rectangle"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/temperature_rectangle" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/rectangle"
-        android:layout_alignTop="@+id/rectangle"
-        android:layout_alignEnd="@+id/rectangle"
-        android:layout_alignBottom="@+id/rectangle"
-        android:layout_centerInParent="true"
-        android:gravity="center"
-        android:text="Температура"
-        android:textColor="#fff"
-        android:textSize="26sp" />
+        <TextView
+            android:layout_width="240dp"
+            android:layout_height="0dp"
+            android:layout_alignStart="@+id/rectangle"
+            android:layout_alignTop="@+id/rectangle"
+            android:layout_alignEnd="@+id/rectangle"
+            android:layout_alignBottom="@+id/rectangle"
+            android:gravity="center"
+            android:text="Температура"
+            android:textColor="#fff"
+            android:textSize="26sp" />
 
 
         <com.github.lzyzsd.circleprogress.ArcProgress
@@ -40,13 +40,13 @@
             android:layout_below="@+id/rectangle"
             android:layout_alignParentStart="true"
             android:layout_marginTop="40dp"
-            app:arc_bottom_text_size="20sp"
+            app:arc_bottom_text_size="15sp"
             app:arc_finished_color="#007DD6"
             app:arc_max="30"
             app:arc_suffix_text="°С"
-            app:arc_suffix_text_size="25sp"
+            app:arc_suffix_text_size="20sp"
             app:arc_text_color="#555"
-            app:arc_text_size="55sp"
+            app:arc_text_size="35sp"
             app:arc_unfinished_color="#CCC" />
 
         <TextView
@@ -64,13 +64,27 @@
             android:textSize="18sp" />
 
         <TextView
+            android:id="@+id/graph_title"
+            android:layout_marginTop="50dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/temperature_progress_bar"
             android:gravity="center"
-            android:text="Здесь будет график"
-            android:textSize="35sp"
-            android:layout_marginTop="150dp"/>
+            android:textSize="26sp"
+            android:layout_height="wrap_content"
+            android:text="График температуры в реальном времени"
+            android:layout_below="@+id/temperature_progress_bar"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:textColor="#493F41"/>
+
+        <com.jjoe64.graphview.GraphView
+            android:id="@+id/graph"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_below="@+id/graph_title"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="20dp" />
 
     </RelativeLayout>
 </ScrollView>

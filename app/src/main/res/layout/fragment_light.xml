@@ -6,6 +6,7 @@
 
 
     <RelativeLayout
+        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="20dp">
@@ -166,8 +167,8 @@
             android:layout_below="@+id/seek_bar_blue"
             android:layout_alignParentEnd="true"
             android:layout_marginTop="50dp"
-            android:background="@drawable/ok_rectangle"
             android:text="ОК"
+            android:background="#2EB43B"
             android:textColor="#fff"
             android:textSize="20sp"/>
 
@@ -180,7 +181,7 @@
             android:layout_marginTop="50dp"
             android:layout_marginEnd="30dp"
             android:layout_toStartOf="@+id/apply_button"
-            android:background="@drawable/ok_rectangle"
+            android:background="#2EB43B"
             android:text="Вернуть"
             android:textColor="#fff"
             android:textSize="20sp" />
