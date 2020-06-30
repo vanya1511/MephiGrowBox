@@ -162,13 +162,13 @@
         <Button
             android:foreground="?android:attr/selectableItemBackground"
             android:id="@+id/apply_button"
-            android:layout_width="100dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/seek_bar_blue"
             android:layout_alignParentEnd="true"
             android:layout_marginTop="50dp"
             android:text="ОК"
-            android:background="#2EB43B"
+            android:background="@drawable/rectangle_ok"
             android:textColor="#fff"
             android:textSize="20sp"/>
 
@@ -181,7 +181,7 @@
             android:layout_marginTop="50dp"
             android:layout_marginEnd="30dp"
             android:layout_toStartOf="@+id/apply_button"
-            android:background="#2EB43B"
+            android:background="@drawable/rectangle_ok"
             android:text="Вернуть"
             android:textColor="#fff"
             android:textSize="20sp" />

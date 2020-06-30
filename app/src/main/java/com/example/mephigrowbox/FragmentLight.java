@@ -17,6 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -37,6 +39,8 @@ public class FragmentLight extends Fragment {
     private TextView lightTxt;
     private Button applyBtn, returnBtn;
     private long redValue, greenValue, blueValue,powerValue;
+    private FirebaseAuth auth;
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
     @Nullable
     @Override
@@ -53,7 +57,7 @@ public class FragmentLight extends Fragment {
 
         GradientDrawable drawable = new GradientDrawable();
         drawable.setColor(Color.parseColor("#2EB43B"));
-        drawable.setCornerRadius(56);
+        drawable.setCornerRadius((float) 122.3);
 
         returnBtn.setBackground(drawable);
 
@@ -62,7 +66,7 @@ public class FragmentLight extends Fragment {
 
         //Turn off/on light
 
-        led = database.getReference("Led");
+        led = database.getReference().child(user.getUid()).child("Led");
 
         led.addValueEventListener(new ValueEventListener() {
             @Override
@@ -112,10 +116,10 @@ public class FragmentLight extends Fragment {
         bBar.setOnSeekBarChangeListener(seekBarChangeListener);
         pBar.setOnSeekBarChangeListener(seekBarChangeListener);
 
-        redColor = database.getReference("RedColor");
-        greenColor = database.getReference("GreenColor");
-        blueColor = database.getReference("BlueColor");
-        power = database.getReference("PowerOfLight");
+        redColor = database.getReference().child(user.getUid()).child("RedColor");
+        greenColor = database.getReference().child(user.getUid()).child("GreenColor");
+        blueColor = database.getReference().child(user.getUid()).child("BlueColor");
+        power = database.getReference().child(user.getUid()).child("PowerOfLight");
 
         applyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -197,7 +201,7 @@ public class FragmentLight extends Fragment {
 
         //Photoresistor:
 
-        DatabaseReference light = database.getReference("Photoresistor");
+        DatabaseReference light = database.getReference().child(user.getUid()).child("Photoresistor");
         lightTxt = getActivity().findViewById(R.id.light_result);
 
         light.addValueEventListener(new ValueEventListener() {
@@ -221,7 +225,7 @@ public class FragmentLight extends Fragment {
             int myColor = Color.argb(pBar.getProgress(), rBar.getProgress(), gBar.getProgress(), bBar.getProgress());
             GradientDrawable drawable = new GradientDrawable();
             drawable.setColor(myColor);
-            drawable.setCornerRadius(56);
+            drawable.setCornerRadius((float) 122.3);
             applyBtn.setBackground(drawable);
 
             Log.d("---------------","------------------------" + myColor);

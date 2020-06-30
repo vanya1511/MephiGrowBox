@@ -14,6 +14,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.github.lzyzsd.circleprogress.ArcProgress;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,6 +37,8 @@ public class FragmentTemp extends Fragment {
     private FirebaseDatabase database;
     private DatabaseReference temperature;
     private long value;
+    private FirebaseAuth auth;
+    FirebaseUser user = auth.getInstance().getCurrentUser();
 
     @Nullable
     @Override
@@ -54,7 +58,7 @@ public class FragmentTemp extends Fragment {
 
         database = FirebaseDatabase.getInstance();
 
-        temperature = database.getReference("Temperature");
+        temperature = database.getReference().child(user.getUid()).child("Temperature");
         final ArcProgress tempBar = view.findViewById(R.id.temperature_progress_bar);
 
         temperature.addValueEventListener(new ValueEventListener() {

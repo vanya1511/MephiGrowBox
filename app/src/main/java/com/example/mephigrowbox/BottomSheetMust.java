@@ -6,12 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,42 +20,30 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.Objects;
-
-public class FragmentInfo extends Fragment {
-
-    private BottomSheetDialogFragment bottom_sheet_choose_plant = null;
-    private BottomSheetDialogFragment bottom_sheet_must = null;
+public class BottomSheetMust extends BottomSheetDialogFragment {
 
     private TextView temp_txt, hum_txt, light_txt, plant_txt;
-    private Button chooseBtn, helpBtn;
-    FirebaseDatabase database;
+
+    private FirebaseDatabase cDatabase;
+    private DatabaseReference light, humiditySoil, temperature, plant;
     private FirebaseAuth auth;
     FirebaseUser user = auth.getInstance().getCurrentUser();
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_info, container, false);
-    }
+        View view = inflater.inflate(R.layout.bottom_sheet_must, container, false);
 
-    @Override
-    public void onStart() {
-        super.onStart();
+        cDatabase = FirebaseDatabase.getInstance();
+        light = cDatabase.getReference().child(user.getUid()).child("MustPhotoresistor");
+        humiditySoil = cDatabase.getReference().child(user.getUid()).child("MustHumiditySoil");
+        temperature = cDatabase.getReference().child(user.getUid()).child("MustTemperature");
+        plant = cDatabase.getReference().child(user.getUid()).child("Plant");
 
-        temp_txt = getActivity().findViewById(R.id.info_temp);
-        hum_txt = getActivity().findViewById(R.id.info_hum);
-        light_txt = getActivity().findViewById(R.id.info_light);
-        plant_txt = getActivity().findViewById(R.id.info_plant);
-        chooseBtn =getActivity().findViewById(R.id.choose_button);
-        helpBtn = getActivity().findViewById(R.id.help_button);
-
-
-        database = FirebaseDatabase.getInstance();
-        DatabaseReference light = database.getReference().child(user.getUid()).child("Photoresistor");
-        DatabaseReference humiditySoil = database.getReference().child(user.getUid()).child("HumiditySoil");
-        DatabaseReference temperature = database.getReference().child(user.getUid()).child("Temperature");
-        DatabaseReference plant = database.getReference().child(user.getUid()).child("Plant");
+        temp_txt = view.findViewById(R.id.must_temp);
+        hum_txt = view.findViewById(R.id.must_humidity);
+        light_txt = view.findViewById(R.id.must_light);
+        plant_txt = view.findViewById(R.id.must_plant);
 
         plant.addValueEventListener(new ValueEventListener() {
             @Override
@@ -81,9 +67,14 @@ public class FragmentInfo extends Fragment {
         light.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                long value = (long) dataSnapshot.getValue();
-                String s = "Освещенность: " + value + " ед.";
-                light_txt.setText(s);
+                if (dataSnapshot.getValue()!=null){
+                    long value = (long) dataSnapshot.getValue();
+                    String s = "Освещенность: " + value + " ед.";
+                    light_txt.setText(s);
+                }else{
+                    String s = "Освещенность: НЕ ВЫБРАНО";
+                    light_txt.setText(s);
+                }
             }
 
             @Override
@@ -95,9 +86,14 @@ public class FragmentInfo extends Fragment {
         humiditySoil.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                long value = (long) dataSnapshot.getValue();
-                String s = "Влажность: " + value + "%";
-                hum_txt.setText(s);
+                if (dataSnapshot.getValue()!=null){
+                    long value = (long) dataSnapshot.getValue();
+                    String s = "Влажность: " + value + "%";
+                    hum_txt.setText(s);
+                }else{
+                    String s = "Влажность: НЕ ВЫБРАНО";
+                    hum_txt.setText(s);
+                }
             }
 
             @Override
@@ -109,9 +105,14 @@ public class FragmentInfo extends Fragment {
         temperature.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                long value = (long) dataSnapshot.getValue();
-                String s = "Температура: " + value + "°C";
-                temp_txt.setText(s);
+                if (dataSnapshot.getValue()!=null){
+                    long value = (long) dataSnapshot.getValue();
+                    String s = "Температура: " + value + " °C";
+                    temp_txt.setText(s);
+                }else{
+                    String s = "Температура: НЕ ВЫБРАНО";
+                    temp_txt.setText(s);
+                }
             }
 
             @Override
@@ -120,22 +121,7 @@ public class FragmentInfo extends Fragment {
             }
         });
 
-        chooseBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bottom_sheet_choose_plant = new BottomSheetChoosePlant();
-                bottom_sheet_choose_plant.show(getChildFragmentManager(), "BottomSheetChoosePlant");
-            }
-        });
-
-        helpBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bottom_sheet_must = new BottomSheetMust();
-                bottom_sheet_must.show(getChildFragmentManager(), "BottomSheetMust");
-            }
-        });
-
-
+        return view;
     }
+
 }
